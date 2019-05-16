@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+#include <glib/gi18n.h>
 #include <redshiftgtk-backend.h>
 #include <redshiftgtk-redshift-wrapper.h>
 
@@ -233,9 +234,9 @@ redshiftgtk_window_show_try_again_dialog (RedshiftGtkWindow *self,
         dialog = gtk_dialog_new_with_buttons (message,
                                               GTK_WINDOW (self),
                                               GTK_DIALOG_MODAL,
-                                              "Try Again",
+                                              _("Try Again"),
                                               GTK_RESPONSE_ACCEPT,
-                                              "Cancel",
+                                              _("Cancel"),
                                               GTK_RESPONSE_REJECT,
                                               NULL);
 
@@ -274,7 +275,7 @@ redshiftgtk_window_set_autostart_callback (RedshiftGtkWindow *self)
         if (error) {
                 g_warning ("redshiftgtk_backend_set_autostart: %s\n", error->message);
                 redshiftgtk_window_show_try_again_dialog (self,
-                                                          "Could not enable autostart",
+                                                          _("Could not enable autostart"),
                                                           error->message,
                                                           &redshiftgtk_window_set_autostart_callback);
                 gtk_switch_set_active (self->autostart_switch, FALSE);
@@ -291,7 +292,7 @@ redshiftgtk_window_apply_changes_callback (RedshiftGtkWindow *self)
         if (error) {
                 g_warning ("redshiftgtk_backend_apply_changes: %s\n", error->message);
                 redshiftgtk_window_show_try_again_dialog (self,
-                                                          "Could not apply changes",
+                                                          _("Could not apply changes"),
                                                           error->message,
                                                           &redshiftgtk_window_set_autostart_callback);
         }
@@ -307,7 +308,7 @@ redshiftgtk_window_start_callback (RedshiftGtkWindow *self)
         if (error) {
                 g_warning ("redshiftgtk_backend_start: %s\n", error->message);
                 redshiftgtk_window_show_try_again_dialog (self,
-                                                          "Could not start redshift",
+                                                          _("Could not start redshift"),
                                                           error->message,
                                                           &redshiftgtk_window_start_callback);
         }

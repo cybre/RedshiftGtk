@@ -4,67 +4,67 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkSizeGroup"/>
   <object class="GtkAdjustment" id="day_brightness_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
     <property name="value">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="day_gamma_b_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
     <property name="value">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="day_gamma_g_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
     <property name="value">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="day_gamma_r_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
     <property name="value">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="latitude_adjustment">
     <property name="lower">-90</property>
     <property name="upper">90</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="longtitude_adjustment">
     <property name="lower">-180</property>
     <property name="upper">180</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="night_brightness_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="night_gamma_b_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="night_gamma_g_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <object class="GtkAdjustment" id="night_gamma_r_adjustment">
-    <property name="lower">0.1</property>
+    <property name="lower">0.10000000000000001</property>
     <property name="upper">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">0.5</property>
   </object>
   <template class="RedshiftGtkWindow" parent="GtkApplicationWindow">
@@ -135,8 +135,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span font="13"&gt;Brightness&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Brightness</property>
+                        <style>
+                          <class name="control-label"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -148,7 +150,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="text" translatable="yes">1.0</property>
+                        <property name="text" translatable="no">1.0</property>
                         <property name="adjustment">day_brightness_adjustment</property>
                         <property name="digits">1</property>
                         <property name="value">1</property>
@@ -163,9 +165,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span font="13"&gt;Gamma
-(RGB)&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Gamma
+(RGB)</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -184,7 +185,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">day_gamma_r_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -200,7 +201,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">day_gamma_g_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -216,7 +217,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">day_gamma_b_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -282,8 +283,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span font="13"&gt;Brightness&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Brightness</property>
+                        <style>
+                          <class name="control-label"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -295,7 +298,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="text" translatable="yes">1.0</property>
+                        <property name="text" translatable="no">1.0</property>
                         <property name="adjustment">night_brightness_adjustment</property>
                         <property name="digits">1</property>
                         <property name="value">1</property>
@@ -310,9 +313,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span font="13"&gt;Gamma
-(RGB)&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">Gamma
+(RGB)</property>
                         <property name="justify">center</property>
                       </object>
                       <packing>
@@ -331,7 +333,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">night_gamma_r_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -347,7 +349,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">night_gamma_g_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -363,7 +365,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">1.0</property>
+                            <property name="text" translatable="no">1.0</property>
                             <property name="adjustment">night_gamma_b_adjustment</property>
                             <property name="digits">1</property>
                             <property name="value">1</property>
@@ -505,8 +507,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">&lt;span font="13"&gt;Location&lt;/span&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Location</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -582,7 +583,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">0.0</property>
+                            <property name="text" translatable="no">0.0</property>
                             <property name="adjustment">latitude_adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -596,7 +597,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
-                            <property name="text" translatable="yes">0.0</property>
+                            <property name="text" translatable="no">0.0</property>
                             <property name="adjustment">longtitude_adjustment</property>
                             <property name="digits">2</property>
                           </object>
@@ -624,8 +625,10 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="margin_bottom">20</property>
-                    <property name="label" translatable="yes">&lt;span font="13"&gt;Method&lt;/span&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Method</property>
+                    <style>
+                      <class name="control-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -640,9 +643,9 @@
                     <property name="margin_bottom">20</property>
                     <property name="active">0</property>
                     <items>
-                      <item translatable="yes">Auto</item>
-                      <item translatable="yes">Randr</item>
-                      <item translatable="yes">Vidmode</item>
+                      <item translatable="no">Auto</item>
+                      <item translatable="no">Randr</item>
+                      <item translatable="no">Vidmode</item>
                     </items>
                   </object>
                   <packing>
@@ -656,8 +659,10 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="margin_bottom">20</property>
-                    <property name="label" translatable="yes">&lt;span font="13"&gt;Smooth transition&lt;/span&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Smooth transition</property>
+                    <style>
+                      <class name="control-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -682,8 +687,10 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="margin_bottom">20</property>
-                    <property name="label" translatable="yes">&lt;span font="13"&gt;Autostart&lt;/span&gt;</property>
-                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">Autostart</property>
+                    <style>
+                      <class name="control-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

@@ -19,6 +19,20 @@ gtk+-3.0
 libm
 ```
 
+# Translating
+You will need to generate the .pot file
+```
+meson build
+ninja -C build redshiftgtk-pot
+```
+After that, you can use Poedit to create your localization or run
+```
+cd po
+msginit -l <language-code>
+```
+and edit the file manually.  
+Don't forget to add your language to LINGUAS!
+
 # TODO
 - Make it possible to set dusk and dawn manually
 

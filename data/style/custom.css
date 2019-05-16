@@ -45,4 +45,6 @@ spinbutton.custom-vertical button.down {
   border-right: 1px solid black;
 }
 
-
+label.control-label {
+  font-size: 13pt;
+}

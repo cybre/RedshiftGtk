@@ -19,6 +19,7 @@
 #include <gio/gio.h>
 #include <pwd.h>
 #include <errno.h>
+#include <glib/gi18n.h>
 
 #include "redshiftgtk-redshift-wrapper.h"
 #include "enums.h"
@@ -756,7 +757,7 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                 int errsv = errno;
                 g_set_error (error, G_IO_ERROR,
                              g_io_error_from_errno (errsv),
-                             "Could not create parent directories: %s",
+                             _("Could not create parent directories: %s"),
                              g_strerror (errsv));
                 return;
         }
