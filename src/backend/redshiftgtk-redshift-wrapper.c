@@ -45,19 +45,6 @@ G_DEFINE_TYPE_WITH_CODE (RedshiftGtkRedshiftWrapper,
                          G_IMPLEMENT_INTERFACE (REDSHIFTGTK_TYPE_BACKEND,
                                                 redshiftgtk_backend_iface_init))
 
-const gchar*
-get_home_directory ()
-{
-        const gchar *path = getenv("HOME");
-        if (path && strlen(path) > 0) {
-                return path;
-        }
-
-        /* Did not get it from HOME, try pw */
-        struct passwd *pw = getpwuid(getuid());
-        return pw->pw_dir;
-}
-
 void
 create_file_if_not_exists (gchar   *path,
                            GError **error)
@@ -94,19 +81,20 @@ static void
 redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
 {
         g_autoptr (GError) error = NULL;
-        const gchar* home_path = NULL;
+        const gchar* user_config_path = NULL;
 
         self->redshift_state = REDSHIFT_STATE_UNDEFINED;
         self->process = NULL;
 
-        home_path = get_home_directory ();
-        if (!home_path) {
+        user_config_path = g_get_user_config_dir ();
+
+        if (!user_config_path) {
                 g_warning ("redshiftgtk_redshift_wrapper_init\n\
-        get_home_directory: Could not find home directory\n");
+        g_get_user_config_dir: Could not get user config directory\n");
                 return;
         }
 
-        self->config_path = g_strconcat (home_path, "/.config/redshift.conf", NULL);
+        self->config_path = g_build_filename (user_config_path, "redshift.conf", NULL);
         self->config = g_key_file_new ();
 
         create_file_if_not_exists (self->config_path, &error);
@@ -596,16 +584,18 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
 {
         g_autoptr (GFile) file = NULL;
         g_autoptr (GError) error = NULL;
-        const gchar *home_path = NULL;
+        const gchar *user_config_path = NULL;
         g_autofree gchar *launcher = NULL;
 
-        home_path = get_home_directory ();
-        if (!home_path) {
+        user_config_path = g_get_user_config_dir ();
+        if (!user_config_path) {
                 return FALSE;
         }
 
-        launcher = g_strconcat (home_path,
-                                "/.config/autostart/redshiftgtk.desktop", NULL);
+        launcher = g_build_filename (user_config_path,
+                                     "autostart",
+                                     "redshiftgtk.desktop",
+                                     NULL);
 
         file = g_file_new_for_path (launcher);
 
@@ -700,19 +690,19 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                                             GError            **error)
 {
         GFile *file = NULL;
-        const gchar *home_path = NULL;
+        const gchar *user_config_path = NULL;
         g_autofree gchar *launcher = NULL;
-        g_autofree gchar *autostart_path = NULL;
 
-        home_path = get_home_directory ();
-        if (!home_path) {
+        user_config_path = g_get_user_config_dir ();
+        if (!user_config_path) {
                 return;
         }
 
-        autostart_path = g_strconcat (home_path,
-                                "/.config/autostart", NULL);
-        launcher = g_strconcat (autostart_path,
-                                "/redshiftgtk.desktop", NULL);
+        launcher = g_build_filename (user_config_path,
+                                     "autostart",
+                                     "redshiftgtk.desktop",
+                                     NULL);
+
         file = g_file_new_for_path (launcher);
 
         if (g_file_query_exists (file, NULL)) {
@@ -752,7 +742,7 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
         }
 
         /* Make sure ~/.config/autostart exists */
-        if (g_mkdir_with_parents (autostart_path, 0775) == -1) {
+        if (g_mkdir_with_parents (g_path_get_dirname (launcher), 0775) == -1) {
                 int errsv = errno;
                 g_set_error (error, G_IO_ERROR,
                              g_io_error_from_errno (errsv),
