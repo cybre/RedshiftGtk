@@ -632,15 +632,16 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
                                        "X-GNOME-Autostart-enabled",
                                        &error);
 
-        if (error) {
+        if (!error) {
+                /* Return true if X-GNOME-Autostart-enabled is true */
+                return (g_strcmp0 (value, "false") == 0);
+        } else {
                 g_debug ("redshiftgtk_redshift_wrapper_get_autostart\n\
         g_key_file_get_string: %s\n", error->message);
-                /* We couldn't get either of the keys. Default to FALSE */
-                return FALSE;
         }
 
-        /* Return true if X-GNOME-Autostart-enabled is true */
-        return (g_strcmp0 (value, "false") == 0);
+        /* We couldn't get either of the keys. Default to FALSE */
+        return FALSE;
 }
 
 void
