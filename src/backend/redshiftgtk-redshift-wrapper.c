@@ -675,7 +675,7 @@ Name=RedshiftGtkAutostart\n\
 Exec=redshift\n\
 Type=Application\n\
 Hidden=%s\n\
-X-GNOME-Autostart-enabled=%s", autostart_value, hidden_value), NULL, &error);
+X-GNOME-Autostart-enabled=%s", hidden_value, autostart_value), NULL, &error);
 
         if (error) {
                 g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create\n\
