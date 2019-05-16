@@ -154,7 +154,7 @@ redshiftgtk_redshift_wrapper_start (RedshiftGtkBackend *backend,
         }
 
         self->process = g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, error,
-                                          "/usr/bin/redshift",
+                                          "redshift",
                                           NULL);
 
         self->redshift_state = REDSHIFT_STATE_RUNNING;
