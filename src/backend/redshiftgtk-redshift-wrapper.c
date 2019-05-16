@@ -101,7 +101,8 @@ redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
 
         home_path = get_home_directory ();
         if (!home_path) {
-                g_warning ("redshiftgtk_redshift_wrapper_init: Could not find home directory\n");
+                g_warning ("redshiftgtk_redshift_wrapper_init\n\
+        get_home_directory: Could not find home directory\n");
                 return;
         }
 
@@ -110,7 +111,8 @@ redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
 
         create_file_if_not_exists (self->config_path, &error);
         if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_init: %s\n", error->message);
+                g_warning ("redshiftgtk_redshift_wrapper_init\n\
+        create_file_if_not_exists: %s\n", error->message);
                 return;
         }
 
@@ -119,7 +121,8 @@ redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
                                    G_KEY_FILE_NONE, &error);
 
         if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_init: %s\n", error->message);
+                g_warning ("redshiftgtk_redshift_wrapper_init\n\
+        g_key_file_load_from_file: %s\n", error->message);
         }
 }
 
@@ -194,7 +197,8 @@ redshiftgtk_redshift_wrapper_get_temperature (RedshiftGtkBackend *backend,
                                                      key, &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_temperature: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_temperature\n\
+        g_key_file_get_double: %s\n",
                          error->message);
                 return 6500.0;
         }
@@ -240,7 +244,8 @@ redshiftgtk_redshift_wrapper_get_location_provider (RedshiftGtkBackend *backend)
                                           "location-provider", &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_location_provider: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_location_provider\n\
+        g_key_file_get_string: %s\n",
                          error->message);
                 return LOCATION_PROVIDER_AUTO;
         }
@@ -284,7 +289,8 @@ redshiftgtk_redshift_wrapper_get_latitude (RedshiftGtkBackend *backend)
                                                   "lat", &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_latitude: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_latitude\n\
+        g_key_file_get_double: %s\n",
                          error->message);
                 return 0;
         }
@@ -315,7 +321,8 @@ redshiftgtk_redshift_wrapper_get_longtitude (RedshiftGtkBackend *backend)
                                                     "lon", &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_longtitude: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_longtitude\n\
+        g_key_file_get_double: %s\n",
                          error->message);
                 return 0;
         }
@@ -359,7 +366,8 @@ redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
                                                     key, &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_brightness: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_brightness\n\
+        g_key_file_get_double: %s\n",
                          error->message);
                 return 1.00;
         }
@@ -441,7 +449,8 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
                                               key, &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_gamma: %s\n", error->message);
+                g_debug ("redshiftgtk_redshift_wrapper_get_gamma\n\
+        g_key_file_get_string: %s\n", error->message);
                 return NULL;
         }
 
@@ -510,7 +519,8 @@ redshiftgtk_redshift_wrapper_get_adjustment_method (RedshiftGtkBackend *backend)
                                                "adjustment-method", &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_adjustment_method: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_adjustment_method\n\
+        g_key_file_get_string: %s\n",
                          error->message);
                 return ADJUSTMENT_METHOD_AUTO;
         }
@@ -561,7 +571,8 @@ redshiftgtk_redshift_wrapper_get_smooth_transition (RedshiftGtkBackend *backend)
                                                     "fade", &error);
 
         if (error) {
-                g_debug ("redshiftgtk_redshift_wrapper_get_smooth_transition: %s\n",
+                g_debug ("redshiftgtk_redshift_wrapper_get_smooth_transition\n\
+        g_key_file_get_double: %s\n",
                          error->message);
                 return FALSE;
         }
@@ -613,7 +624,8 @@ redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
         stream = g_file_create_finish (file, result, &error);
 
         if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create: %s\n", error->message);
+                g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create\n\
+        g_file_create_finish: %s\n", error->message);
                 return;
         }
 
@@ -624,7 +636,8 @@ Exec=redshift\n\
 Type=Application", NULL, &error);
 
         if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create: %s\n", error->message);
+                g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create\n\
+        g_data_output_stream_put_string: %s\n", error->message);
                 g_file_delete (file, NULL, NULL);
         }
 }
