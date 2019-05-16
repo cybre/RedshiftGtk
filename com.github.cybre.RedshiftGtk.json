@@ -40,7 +40,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "file:///home/cybre/Projects/RedshiftGtk"
+                    "url" : "https://github.com/cybre/RedshiftGtk.git"
                 }
             ]
         }
