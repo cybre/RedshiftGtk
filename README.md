@@ -1,5 +1,5 @@
 # RedshiftGtk
-Redshift Configuration GUI
+Redshift Configuration GUI  
 Currently in development
 
 # Building
