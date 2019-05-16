@@ -1,0 +1,7 @@
+data/com.github.cybre.RedshiftGtk.desktop.in
+data/com.github.cybre.RedshiftGtk.appdata.xml.in
+data/com.github.cybre.RedshiftGtk.gschema.xml
+src/redshiftgtk-window.ui
+src/main.c
+src/redshiftgtk-window.c
+

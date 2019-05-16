@@ -1,0 +1,48 @@
+/*
+You can type here any CSS rule recognised by GTK+.
+You can temporarily disable this custom CSS by clicking on the “Pause” button above.
+
+Changes are applied instantly and globally, for the whole application.
+*/
+
+spinbutton.custom-vertical entry,
+spinbutton.custom-vertical {
+	color: white;
+	font-size: 30px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+}
+
+spinbutton.custom-vertical entry {
+	background: none;
+	padding: 10px;
+	border: 1px solid black;
+}
+
+spinbutton.custom-vertical button {
+  min-height: 20px;
+  box-shadow: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: #eeeeee;
+}
+
+spinbutton.custom-vertical button.up {
+  border-radius: 0;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+spinbutton.custom-vertical button.down {
+  border-radius: 0;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+

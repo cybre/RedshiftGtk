@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/cybre/RedshiftGtk">
+    <file>ui/redshiftgtk-window.ui</file>
+    <file>images/slider-day.png</file>
+    <file>images/slider-night.png</file>
+    <file>images@2x/slider-day.png</file>
+    <file>images@2x/slider-night.png</file>
+    <file>style/custom.css</file>
+  </gresource>
+</gresources>
