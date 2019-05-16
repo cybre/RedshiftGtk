@@ -1,0 +1,2 @@
+# redshiftgtk
+Redshift Configuration GUI
