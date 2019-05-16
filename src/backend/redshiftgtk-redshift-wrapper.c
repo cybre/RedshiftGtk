@@ -595,6 +595,7 @@ gboolean
 redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
 {
         g_autoptr (GFile) file = NULL;
+        g_autoptr (GError) error = NULL;
         const gchar *home_path = NULL;
         g_autofree gchar *launcher = NULL;
 
@@ -607,7 +608,49 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
                                 "/.config/autostart/redshiftgtk.desktop", NULL);
 
         file = g_file_new_for_path (launcher);
-        return g_file_query_exists (file, NULL);
+
+        if (!g_file_query_exists (file, NULL)) {
+                return FALSE;
+        }
+
+        GKeyFile *desktop = g_key_file_new ();
+        g_key_file_load_from_file (desktop,
+                                   launcher,
+                                   G_KEY_FILE_NONE, &error);
+
+        if (error) {
+                g_debug ("redshiftgtk_redshift_wrapper_get_autostart\n\
+        g_key_file_load_from_file: %s\n", error->message);
+                return FALSE;
+        }
+
+        g_autofree gchar *value = g_key_file_get_string (desktop,
+                                                         "Desktop Entry",
+                                                         "Hidden",
+                                                         &error);
+
+        if (!error) {
+                /* Return true if Hidden is false */
+                return (g_strcmp0 (value, "false") == 0);
+        } else {
+                g_debug ("redshiftgtk_redshift_wrapper_get_autostart\n\
+        g_key_file_get_string: %s\n", error->message);
+        }
+
+        value = g_key_file_get_string (desktop,
+                                       "Desktop Entry",
+                                       "X-GNOME-Autostart-enabled",
+                                       &error);
+
+        if (error) {
+                g_debug ("redshiftgtk_redshift_wrapper_get_autostart\n\
+        g_key_file_get_string: %s\n", error->message);
+                /* We couldn't get either of the keys. Default to FALSE */
+                return FALSE;
+        }
+
+        /* Return true if X-GNOME-Autostart-enabled is true */
+        return (g_strcmp0 (value, "false") == 0);
 }
 
 void
@@ -619,8 +662,12 @@ redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
         g_autoptr (GFileOutputStream) stream = NULL;
         g_autoptr (GDataOutputStream) output = NULL;
         g_autoptr (GError) error = NULL;
+        gboolean autostart = FALSE;
+        const gchar *autostart_value = NULL;
+        const gchar *hidden_value = NULL;
 
         file = G_FILE (source_object);
+        autostart = GPOINTER_TO_INT (user_data);
         stream = g_file_create_finish (file, result, &error);
 
         if (error) {
@@ -629,11 +676,16 @@ redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
                 return;
         }
 
+        hidden_value = (autostart) ? "false" : "true";
+        autostart_value = (autostart) ? "true" : "false";
+
         output = g_data_output_stream_new (G_OUTPUT_STREAM (stream));
-        g_data_output_stream_put_string (output, "[Desktop Entry]\n\
+        g_data_output_stream_put_string (output, g_strdup_printf ("[Desktop Entry]\n\
 Name=RedshiftGtkAutostart\n\
 Exec=redshift\n\
-Type=Application", NULL, &error);
+Type=Application\n\
+Hidden=%s\n\
+X-GNOME-Autostart-enabled=%s", autostart_value, hidden_value), NULL, &error);
 
         if (error) {
                 g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create\n\
@@ -664,9 +716,37 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
         file = g_file_new_for_path (launcher);
 
         if (g_file_query_exists (file, NULL)) {
-                if (autostart == FALSE) {
-                        g_file_delete (file, NULL, NULL);
+                GKeyFile *desktop = g_key_file_new ();
+                g_key_file_load_from_file (desktop,
+                                           launcher,
+                                           G_KEY_FILE_NONE, error);
+
+                if (*error) {
+                        return;
                 }
+
+                if (autostart) {
+                        g_key_file_set_string (desktop,
+                                                "Desktop Entry",
+                                                "Hidden",
+                                                "false");
+                        g_key_file_set_string (desktop,
+                                                "Desktop Entry",
+                                                "X-GNOME-Autostart-enabled",
+                                                "true");
+                } else {
+                        g_key_file_set_string (desktop,
+                                                "Desktop Entry",
+                                                "Hidden",
+                                                "true");
+                        g_key_file_set_string (desktop,
+                                                "Desktop Entry",
+                                                "X-GNOME-Autostart-enabled",
+                                                "false");
+                }
+
+                g_key_file_save_to_file (desktop, launcher, error);
+
                 /* It already exists, don't write into it again */
                 return;
         }
@@ -686,7 +766,7 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                              G_PRIORITY_DEFAULT,
                              NULL,
                              redshiftgtk_redshift_wrapper_autostart_file_create_cb,
-                             NULL);
+                             GINT_TO_POINTER (autostart));
 }
 
 void
