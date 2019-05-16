@@ -105,7 +105,7 @@ redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
                 return;
         }
 
-        self->config_path = g_strconcat (home_path, "/.redshiftgtk", NULL);
+        self->config_path = g_strconcat (home_path, "/.config/redshift.conf", NULL);
         self->config = g_key_file_new ();
 
         create_file_if_not_exists (self->config_path, &error);
@@ -164,9 +164,6 @@ redshiftgtk_redshift_wrapper_start (RedshiftGtkBackend *backend,
 
         self->process = g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, error,
                                           "/usr/bin/redshift",
-                                          "-P",
-                                          "-c",
-                                          self->config_path,
                                           NULL);
 
         self->redshift_state = REDSHIFT_STATE_RUNNING;
@@ -607,13 +604,11 @@ redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
                                                        GAsyncResult *result,
                                                        gpointer user_data)
 {
-        RedshiftGtkRedshiftWrapper *self = NULL;
         g_autoptr (GFile) file = NULL;
         g_autoptr (GFileOutputStream) stream = NULL;
         g_autoptr (GDataOutputStream) output = NULL;
         g_autoptr (GError) error = NULL;
 
-        self = REDSHIFTGTK_REDSHIFT_WRAPPER (user_data);
         file = G_FILE (source_object);
         stream = g_file_create_finish (file, result, &error);
 
@@ -623,10 +618,10 @@ redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
         }
 
         output = g_data_output_stream_new (G_OUTPUT_STREAM (stream));
-        g_data_output_stream_put_string (output, g_strdup_printf("[Desktop Entry]\n\
+        g_data_output_stream_put_string (output, "[Desktop Entry]\n\
 Name=RedshiftGtkAutostart\n\
-Exec=redshift -c %s\n\
-Type=Application", self->config_path), NULL, &error);
+Exec=redshift\n\
+Type=Application", NULL, &error);
 
         if (error) {
                 g_warning ("redshiftgtk_redshift_wrapper_set_autostart_file_create: %s\n", error->message);
@@ -678,7 +673,7 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                              G_PRIORITY_DEFAULT,
                              NULL,
                              redshiftgtk_redshift_wrapper_autostart_file_create_cb,
-                             self);
+                             NULL);
 }
 
 void
