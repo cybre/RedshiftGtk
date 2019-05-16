@@ -16,5 +16,8 @@ gtk+-3.0
 libm
 ```
 
+# TODO
+- Make it possible to set dusk and dawn manually
+
 # Screenshots
 ![Landing view](data/screenshots/main.png)
