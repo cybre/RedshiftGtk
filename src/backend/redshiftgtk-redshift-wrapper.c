@@ -26,6 +26,11 @@
 #define DEFAULT_SETTINGS_GROUP "redshift"
 #define MANUAL_SETTINGS_GROUP "manual"
 
+#define DEFAULT_DAY_TEMPERATURE 6500
+#define DEFAULT_NIGHT_TEMPERATURE 4500
+#define DEFAULT_BRIGHTNESS 1.0
+#define DEFAULT_SMOOTH_TRANSITION FALSE
+
 struct _RedshiftGtkRedshiftWrapper
 {
         GObject parent_instance;
@@ -188,7 +193,11 @@ redshiftgtk_redshift_wrapper_get_temperature (RedshiftGtkBackend *backend,
                 g_debug ("redshiftgtk_redshift_wrapper_get_temperature\n\
         g_key_file_get_double: %s\n",
                          error->message);
-                return 6500.0;
+                if (period == TIME_PERIOD_DAY) {
+                        return DEFAULT_DAY_TEMPERATURE;
+                } else if (period == TIME_PERIOD_NIGHT) {
+                        return DEFAULT_NIGHT_TEMPERATURE;
+                }
         }
 
         return temperature;
@@ -345,7 +354,7 @@ redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
                 key = "brightness-night";
                 break;
         default:
-                return 1.00;
+                return DEFAULT_BRIGHTNESS;
         }
 
         g_autoptr (GError) error = NULL;
@@ -357,7 +366,7 @@ redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
                 g_debug ("redshiftgtk_redshift_wrapper_get_brightness\n\
         g_key_file_get_double: %s\n",
                          error->message);
-                return 1.00;
+                return DEFAULT_BRIGHTNESS;
         }
 
         return brightness;
@@ -562,7 +571,7 @@ redshiftgtk_redshift_wrapper_get_smooth_transition (RedshiftGtkBackend *backend)
                 g_debug ("redshiftgtk_redshift_wrapper_get_smooth_transition\n\
         g_key_file_get_double: %s\n",
                          error->message);
-                return FALSE;
+                return DEFAULT_SMOOTH_TRANSITION;
         }
 
         return transition;
