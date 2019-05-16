@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=redshiftgtk
+Name=Redshift Configuration
 Comment=Configuration tool for redshift
 Exec=redshiftgtk
 Terminal=false
