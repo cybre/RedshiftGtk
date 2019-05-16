@@ -1,6 +1,9 @@
 # RedshiftGtk
 Redshift Configuration GUI  
-Currently in development
+Currently in development  
+
+Buy me a beer/coffee?  
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/StefanRic)
 
 # Building
 ```
