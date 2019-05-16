@@ -18,8 +18,6 @@
 #include <redshiftgtk-backend.h>
 #include <redshiftgtk-redshift-wrapper.h>
 
-#include "../util.h"
-
 #include "redshiftgtk-config.h"
 #include "redshiftgtk-window.h"
 #include "redshiftgtk-radial-slider.h"
