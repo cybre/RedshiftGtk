@@ -455,7 +455,7 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Day temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_DAY);
-        day_adjustment = gtk_adjustment_new (value, 1000.0, 15000.00,
+        day_adjustment = gtk_adjustment_new (value, 1000.0, 12000.00,
                                              50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (day_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,
@@ -480,7 +480,7 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Night temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_NIGHT);
-        night_adjustment = gtk_adjustment_new (value, 1000.0, 15000.00,
+        night_adjustment = gtk_adjustment_new (value, 1000.0, 12000.00,
                                                50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (night_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,
