@@ -589,6 +589,7 @@ redshiftgtk_radial_slider_set_value (RedshiftGtkRadialSlider *self,
                                      gdouble value)
 {
         g_assert (self != NULL && REDSHIFTGTK_IS_RADIAL_SLIDER (self));
+        g_assert (value <= gtk_adjustment_get_upper (self->priv->adjustment));
         gtk_adjustment_set_value (self->priv->adjustment, value);
 }
 

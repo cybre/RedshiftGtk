@@ -429,11 +429,14 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         GtkStyleContext *style_ctx;
         GdkScreen *screen;
         g_autoptr(GtkCssProvider) provider = NULL;
-        gdouble value;
+        gdouble value, min_temp, max_temp;
         const gchar *image_resource_path;
 
         gtk_widget_init_template (GTK_WIDGET (self));
         self->backend = redshiftgtk_redshift_wrapper_new();
+
+        min_temp = 1000.00;
+        max_temp = 12000.00;
 
         /* Have it always be initialized */
         image_resource_path = "/com/github/cybre/RedshiftGtk/images/";
@@ -455,7 +458,13 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Day temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_DAY);
-        day_adjustment = gtk_adjustment_new (value, 1000.0, 12000.00,
+        /* Limit the temperature */
+        if (value > max_temp) {
+                value = max_temp;
+        } else if (value < min_temp) {
+                value = min_temp;
+        }
+        day_adjustment = gtk_adjustment_new (value, min_temp, max_temp,
                                              50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (day_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,
@@ -480,7 +489,13 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Night temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_NIGHT);
-        night_adjustment = gtk_adjustment_new (value, 1000.0, 12000.00,
+        /* Limit the temperature */
+        if (value > max_temp) {
+                value = max_temp;
+        } else if (value < min_temp) {
+                value = min_temp;
+        }
+        night_adjustment = gtk_adjustment_new (value, min_temp, max_temp,
                                                50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (night_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,
