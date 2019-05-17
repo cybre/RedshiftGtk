@@ -65,10 +65,9 @@ redshiftgtk_radial_slider_load_pixbuf (RedshiftGtkRadialSlider *self,
 
         image = gdk_pixbuf_new_from_resource (path, &error);
 
-        if (error) {
+        if (error)
                 printf ("redshiftgtk_radial_slider_load_pixbuf : %s\n",
                         error->message);
-        }
 
         self->priv->image_pixbuf = image;
 }
@@ -258,13 +257,12 @@ redshiftgtk_radial_slider_scroll_event (GtkWidget *widget,
         value = gtk_adjustment_get_value (self->priv->adjustment);
         page_inc = gtk_adjustment_get_page_increment (self->priv->adjustment);
 
-        if (event->direction == GDK_SCROLL_UP) {
+        if (event->direction == GDK_SCROLL_UP)
                 value += page_inc;
-        } else if (event->direction == GDK_SCROLL_DOWN) {
+        else if (event->direction == GDK_SCROLL_DOWN)
                 value -= page_inc;
-        } else {
+        else
                 return GDK_EVENT_PROPAGATE;
-        }
 
         gtk_adjustment_set_value (self->priv->adjustment, value);
         redshiftgtk_radial_slider_update (self);
@@ -590,6 +588,7 @@ redshiftgtk_radial_slider_set_value (RedshiftGtkRadialSlider *self,
 {
         g_assert (self != NULL && REDSHIFTGTK_IS_RADIAL_SLIDER (self));
         g_assert (value <= gtk_adjustment_get_upper (self->priv->adjustment));
+        g_assert (value >= gtk_adjustment_get_lower (self->priv->adjustment));
         gtk_adjustment_set_value (self->priv->adjustment, value);
 }
 

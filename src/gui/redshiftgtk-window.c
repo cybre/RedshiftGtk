@@ -214,9 +214,8 @@ redshiftgtk_window_show_try_again_response (GtkDialog *dialog,
 
         gtk_widget_destroy (GTK_WIDGET (dialog));
 
-        if (response_id == GTK_RESPONSE_REJECT) {
+        if (response_id == GTK_RESPONSE_REJECT)
                 return;
-        }
 
         callback (self);
 }
@@ -333,14 +332,12 @@ redshiftgtk_window_apply_button_clicked (GtkWidget *widget, gpointer data)
                 redshiftgtk_radial_slider_get_value(self->night_temp_slider));
 
         /* Location provider */
-        if (g_strcmp0 (gtk_stack_get_visible_child_name (self->location_stack),
-                       "manual") == 0) {
+        if (g_strcmp0 (gtk_stack_get_visible_child_name (self->location_stack), "manual") == 0)
                 redshiftgtk_backend_set_location_provider (self->backend,
                                                            LOCATION_PROVIDER_MANUAL);
-        } else {
+        else
                 redshiftgtk_backend_set_location_provider (self->backend,
                                                            LOCATION_PROVIDER_AUTO);
-        }
 
         /* Latitude and longtitude */
         redshiftgtk_backend_set_latitude (self->backend,
@@ -429,22 +426,18 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         GtkStyleContext *style_ctx;
         GdkScreen *screen;
         g_autoptr(GtkCssProvider) provider = NULL;
-        gdouble value, min_temp, max_temp;
+        gdouble value;
         const gchar *image_resource_path;
 
         gtk_widget_init_template (GTK_WIDGET (self));
         self->backend = redshiftgtk_redshift_wrapper_new();
 
-        min_temp = 1000.00;
-        max_temp = 12000.00;
-
         /* Have it always be initialized */
         image_resource_path = "/com/github/cybre/RedshiftGtk/images/";
 
         gdouble factor = gtk_widget_get_scale_factor (GTK_WIDGET (self));
-        if (factor == 2.0) {
+        if (factor == 2.0)
                 image_resource_path = "/com/github/cybre/RedshiftGtk/images@2x/";
-        }
 
         screen = gdk_screen_get_default ();
         provider = gtk_css_provider_new ();
@@ -458,13 +451,7 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Day temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_DAY);
-        /* Limit the temperature */
-        if (value > max_temp) {
-                value = max_temp;
-        } else if (value < min_temp) {
-                value = min_temp;
-        }
-        day_adjustment = gtk_adjustment_new (value, min_temp, max_temp,
+        day_adjustment = gtk_adjustment_new (value, 1000.00, 12000.00,
                                              50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (day_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,
@@ -489,13 +476,7 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         /* Night temperature */
         value = redshiftgtk_backend_get_temperature(self->backend,
                                                     TIME_PERIOD_NIGHT);
-        /* Limit the temperature */
-        if (value > max_temp) {
-                value = max_temp;
-        } else if (value < min_temp) {
-                value = min_temp;
-        }
-        night_adjustment = gtk_adjustment_new (value, min_temp, max_temp,
+        night_adjustment = gtk_adjustment_new (value, 1000.00, 12000.00,
                                                50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (night_adjustment, 256.0);
         redshiftgtk_radial_slider_set_image_path (radial,

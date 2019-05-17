@@ -27,6 +27,15 @@
 #define DEFAULT_SETTINGS_GROUP "redshift"
 #define MANUAL_SETTINGS_GROUP "manual"
 
+#define MIN_TEMPERATURE 1000
+#define MAX_TEMPERATURE 12000
+
+#define MIN_BRIGHTNESS 0.1
+#define MAX_BRIGHTNESS 1.0
+
+#define MIN_GAMMA 0.1
+#define MAX_GAMMA 1.0
+
 #define DEFAULT_DAY_TEMPERATURE 6500
 #define DEFAULT_NIGHT_TEMPERATURE 4500
 #define DEFAULT_BRIGHTNESS 1.0
@@ -61,9 +70,8 @@ create_file_if_not_exists (gchar   *path,
         g_file_create (file, G_FILE_CREATE_NONE, NULL, error);
 
         /* Invalidate the error if the file already exists */
-        if (*error && g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+        if (*error && g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_EXISTS))
                 *error = NULL;
-        }
 }
 
 static void
@@ -142,9 +150,8 @@ redshiftgtk_redshift_wrapper_stop (RedshiftGtkBackend *backend)
                           "killall", "-s", "KILL", "redshift", NULL);
         g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, NULL,
                           "killall", "-s", "KILL", "redshift-gtk", NULL);
-        if (self->process) {
+        if (self->process)
                 g_subprocess_force_exit (self->process);
-        }
 
         self->redshift_state = REDSHIFT_STATE_STOPPED;
 }
@@ -155,9 +162,8 @@ redshiftgtk_redshift_wrapper_start (RedshiftGtkBackend *backend,
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
 
-        if (self->redshift_state != REDSHIFT_STATE_STOPPED) {
+        if (self->redshift_state != REDSHIFT_STATE_STOPPED)
                 redshiftgtk_redshift_wrapper_stop (backend);
-        }
 
         self->process = g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, error,
                                           "redshift",
@@ -194,14 +200,19 @@ redshiftgtk_redshift_wrapper_get_temperature (RedshiftGtkBackend *backend,
                 g_debug ("redshiftgtk_redshift_wrapper_get_temperature\n\
         g_key_file_get_double: %s\n",
                          error->message);
-                if (period == TIME_PERIOD_DAY) {
-                        return DEFAULT_DAY_TEMPERATURE;
-                } else if (period == TIME_PERIOD_NIGHT) {
-                        return DEFAULT_NIGHT_TEMPERATURE;
-                }
+                goto default_temp;
         }
 
+        if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATURE)
+                goto default_temp;
+
         return temperature;
+
+default_temp:
+        if (period == TIME_PERIOD_DAY)
+                return DEFAULT_DAY_TEMPERATURE;
+        /* NIGHT */
+        return DEFAULT_NIGHT_TEMPERATURE;
 }
 
 void
@@ -248,9 +259,8 @@ redshiftgtk_redshift_wrapper_get_location_provider (RedshiftGtkBackend *backend)
                 return LOCATION_PROVIDER_AUTO;
         }
 
-        if (g_strcmp0 (provider, "manual") == 0) {
+        if (g_strcmp0 (provider, "manual") == 0)
                 return LOCATION_PROVIDER_MANUAL;
-        }
 
         return LOCATION_PROVIDER_AUTO;
 }
@@ -370,6 +380,9 @@ redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
                 return DEFAULT_BRIGHTNESS;
         }
 
+        if (brightness < MIN_BRIGHTNESS || brightness > MAX_BRIGHTNESS)
+                return DEFAULT_BRIGHTNESS;
+
         return brightness;
 }
 
@@ -428,6 +441,9 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
                                               DEFAULT_SETTINGS_GROUP,
                                               key, &error);
 
+        if (gamma_double < MIN_GAMMA || gamma_double > MAX_GAMMA)
+                return NULL;
+
         /* If it is indeed single double value, return now */
         if (!error) {
                 g_array_append_val (gamma, gamma_double);
@@ -467,6 +483,13 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
         sscanf (gamma_parts[0], "%lf", &red);
         sscanf (gamma_parts[1], "%lf", &green);
         sscanf (gamma_parts[2], "%lf", &blue);
+
+        if (red < MIN_GAMMA || red > MAX_GAMMA)
+                red = 1.00;
+        if (green < MIN_GAMMA || green > MAX_GAMMA)
+                green = 1.00;
+        if (blue < MIN_GAMMA || blue > MAX_GAMMA)
+                blue = 1.00;
 
         /* Add to array */
         g_array_append_val (gamma, red);
@@ -523,11 +546,10 @@ redshiftgtk_redshift_wrapper_get_adjustment_method (RedshiftGtkBackend *backend)
                 return ADJUSTMENT_METHOD_AUTO;
         }
 
-        if (g_strcmp0 (method, "randr") == 0) {
+        if (g_strcmp0 (method, "randr") == 0)
                 return ADJUSTMENT_METHOD_RANDR;
-        } else if (g_strcmp0 (method, "vidmode") == 0) {
+        else if (g_strcmp0 (method, "vidmode") == 0)
                 return ADJUSTMENT_METHOD_VIDMODE;
-        }
 
         /* Fallback to auto */
         return ADJUSTMENT_METHOD_AUTO;
@@ -598,9 +620,8 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
         g_autofree gchar *launcher = NULL;
 
         user_config_path = g_get_user_config_dir ();
-        if (!user_config_path) {
+        if (!user_config_path)
                 return FALSE;
-        }
 
         launcher = g_build_filename (user_config_path,
                                      "autostart",
@@ -609,9 +630,8 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
 
         file = g_file_new_for_path (launcher);
 
-        if (!g_file_query_exists (file, NULL)) {
+        if (!g_file_query_exists (file, NULL))
                 return FALSE;
-        }
 
         GKeyFile *desktop = g_key_file_new ();
         g_key_file_load_from_file (desktop,
@@ -705,9 +725,8 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
         g_autofree gchar *launcher = NULL;
 
         user_config_path = g_get_user_config_dir ();
-        if (!user_config_path) {
+        if (!user_config_path)
                 return;
-        }
 
         launcher = g_build_filename (user_config_path,
                                      "autostart",
@@ -722,9 +741,8 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                                            launcher,
                                            G_KEY_FILE_NONE, error);
 
-                if (*error) {
+                if (*error)
                         return;
-                }
 
                 if (autostart) {
                         g_key_file_set_string (desktop,
@@ -779,9 +797,8 @@ redshiftgtk_redshift_wrapper_apply_changes (RedshiftGtkBackend *backend,
 
         create_file_if_not_exists (self->config_path, error);
 
-        if (*error) {
+        if (*error)
                 return;
-        }
 
         g_key_file_save_to_file (self->config, self->config_path, error);
 }
