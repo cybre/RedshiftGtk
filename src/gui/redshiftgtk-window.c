@@ -49,6 +49,7 @@ struct _RedshiftGtkWindow
         GtkComboBoxText *method_combobox;
         GtkSwitch       *transition_switch;
         GtkSwitch       *autostart_switch;
+        GtkButton       *stop_button;
         GtkButton       *apply_button;
         GtkButton       *cancel_button;
 
@@ -117,6 +118,8 @@ redshiftgtk_window_class_init (RedshiftGtkWindowClass *klass)
                                               transition_switch);
         gtk_widget_class_bind_template_child (widget_class, RedshiftGtkWindow,
                                               autostart_switch);
+        gtk_widget_class_bind_template_child (widget_class, RedshiftGtkWindow,
+                                              stop_button);
         gtk_widget_class_bind_template_child (widget_class, RedshiftGtkWindow,
                                               apply_button);
         gtk_widget_class_bind_template_child (widget_class, RedshiftGtkWindow,
@@ -397,6 +400,13 @@ redshiftgtk_window_cancel_button_clicked (GtkWidget *widget, gpointer data)
 }
 
 void
+redshiftgtk_window_stop_button_clicked (GtkWidget *widget, gpointer data)
+{
+        RedshiftGtkWindow *self = data;
+        redshiftgtk_backend_stop (self->backend);
+}
+
+void
 redshiftgtk_window_scale_factor_changed (RedshiftGtkWindow *self,
                                          gpointer data)
 {
@@ -520,6 +530,10 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         g_signal_connect (G_OBJECT (night_entry), "value-changed",
                           G_CALLBACK (redshiftgtk_window_spinner_value_changed_cb),
                           self->night_temp_slider);
+
+        g_signal_connect (G_OBJECT (self->stop_button), "clicked",
+                          G_CALLBACK (redshiftgtk_window_stop_button_clicked),
+                          self);
 
         g_signal_connect (G_OBJECT (self->apply_button), "clicked",
                           G_CALLBACK (redshiftgtk_window_apply_button_clicked),
