@@ -193,7 +193,7 @@ redshiftgtk_window_populate_controls (RedshiftGtkWindow *self)
 }
 
 void
-redshiftgtk_window_adjustment_value_changed_cb (GtkAdjustment *adjustment, gpointer data)
+adjustment_value_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
         GtkSpinButton *entry = data;
         gdouble value = gtk_adjustment_get_value (adjustment);
@@ -201,16 +201,16 @@ redshiftgtk_window_adjustment_value_changed_cb (GtkAdjustment *adjustment, gpoin
 }
 
 void
-redshiftgtk_window_spinner_value_changed_cb (GtkSpinButton *spinner, gpointer data)
+spinner_value_changed_cb (GtkSpinButton *spinner, gpointer data)
 {
         RadialSlider *slider = data;
         redshiftgtk_radial_slider_update(slider);
 }
 
 void
-redshiftgtk_window_show_try_again_response (GtkDialog *dialog,
-                                            gint       response_id,
-                                            gpointer   user_data)
+try_again_dialog_response_cb (GtkDialog *dialog,
+                              gint       response_id,
+                              gpointer   user_data)
 {
         TryAgainDialogCallback callback = (TryAgainDialogCallback)user_data;
         RedshiftGtkWindow *self = REDSHIFTGTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog)));
@@ -261,12 +261,12 @@ redshiftgtk_window_show_try_again_dialog (RedshiftGtkWindow *self,
         gtk_widget_show_all (dialog);
 
         g_signal_connect (GTK_DIALOG (dialog), "response",
-                          G_CALLBACK (redshiftgtk_window_show_try_again_response),
+                          G_CALLBACK (try_again_dialog_response_cb),
                           callback);
 }
 
 void
-redshiftgtk_window_set_autostart_callback (RedshiftGtkWindow *self)
+backend_set_autostart_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
 
@@ -279,13 +279,13 @@ redshiftgtk_window_set_autostart_callback (RedshiftGtkWindow *self)
                 redshiftgtk_window_show_try_again_dialog (self,
                                                           _("Could not enable autostart"),
                                                           error->message,
-                                                          &redshiftgtk_window_set_autostart_callback);
+                                                          &backend_set_autostart_cb);
                 gtk_switch_set_active (self->autostart_switch, FALSE);
         }
 }
 
 void
-redshiftgtk_window_apply_changes_callback (RedshiftGtkWindow *self)
+backend_apply_changes_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
 
@@ -296,12 +296,12 @@ redshiftgtk_window_apply_changes_callback (RedshiftGtkWindow *self)
                 redshiftgtk_window_show_try_again_dialog (self,
                                                           _("Could not apply changes"),
                                                           error->message,
-                                                          &redshiftgtk_window_set_autostart_callback);
+                                                          &backend_set_autostart_cb);
         }
 }
 
 void
-redshiftgtk_window_start_callback (RedshiftGtkWindow *self)
+backend_start_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
 
@@ -312,12 +312,12 @@ redshiftgtk_window_start_callback (RedshiftGtkWindow *self)
                 redshiftgtk_window_show_try_again_dialog (self,
                                                           _("Could not start redshift"),
                                                           error->message,
-                                                          &redshiftgtk_window_start_callback);
+                                                          &backend_start_cb);
         }
 }
 
 void
-redshiftgtk_window_apply_button_clicked (GtkWidget *widget, gpointer data)
+apply_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
 
@@ -382,17 +382,17 @@ redshiftgtk_window_apply_button_clicked (GtkWidget *widget, gpointer data)
                 gtk_switch_get_active (self->transition_switch));
 
         /* Autostart policy */
-        redshiftgtk_window_set_autostart_callback (self);
+        backend_set_autostart_cb (self);
 
         /* Apply settings */
-        redshiftgtk_window_apply_changes_callback (self);
+        backend_apply_changes_cb (self);
 
         /* Start again with new settings */
-        redshiftgtk_window_start_callback (self);
+        backend_start_cb (self);
 }
 
 void
-redshiftgtk_window_cancel_button_clicked (GtkWidget *widget, gpointer data)
+cancel_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
 
@@ -400,15 +400,15 @@ redshiftgtk_window_cancel_button_clicked (GtkWidget *widget, gpointer data)
 }
 
 void
-redshiftgtk_window_stop_button_clicked (GtkWidget *widget, gpointer data)
+stop_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
         redshiftgtk_backend_stop (self->backend);
 }
 
 void
-redshiftgtk_window_scale_factor_changed (RedshiftGtkWindow *self,
-                                         gpointer data)
+window_scale_factor_changed_cb (RedshiftGtkWindow *self,
+                                gpointer data)
 {
         gdouble factor = gtk_widget_get_scale_factor (GTK_WIDGET(self));
 
@@ -516,34 +516,34 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
 
         /* In the darkness bind them */
         g_signal_connect (G_OBJECT (day_adjustment), "value-changed",
-                          G_CALLBACK (redshiftgtk_window_adjustment_value_changed_cb),
+                          G_CALLBACK (adjustment_value_changed_cb),
                           day_entry);
 
         g_signal_connect (G_OBJECT (day_entry), "value-changed",
-                          G_CALLBACK (redshiftgtk_window_spinner_value_changed_cb),
+                          G_CALLBACK (spinner_value_changed_cb),
                           self->day_temp_slider);
 
         g_signal_connect (G_OBJECT (night_adjustment), "value-changed",
-                          G_CALLBACK (redshiftgtk_window_adjustment_value_changed_cb),
+                          G_CALLBACK (adjustment_value_changed_cb),
                           night_entry);
 
         g_signal_connect (G_OBJECT (night_entry), "value-changed",
-                          G_CALLBACK (redshiftgtk_window_spinner_value_changed_cb),
+                          G_CALLBACK (spinner_value_changed_cb),
                           self->night_temp_slider);
 
         g_signal_connect (G_OBJECT (self->stop_button), "clicked",
-                          G_CALLBACK (redshiftgtk_window_stop_button_clicked),
+                          G_CALLBACK (stop_button_clicked_cb),
                           self);
 
         g_signal_connect (G_OBJECT (self->apply_button), "clicked",
-                          G_CALLBACK (redshiftgtk_window_apply_button_clicked),
+                          G_CALLBACK (apply_button_clicked_cb),
                           self);
 
         g_signal_connect (G_OBJECT (self->cancel_button), "clicked",
-                          G_CALLBACK (redshiftgtk_window_cancel_button_clicked),
+                          G_CALLBACK (cancel_button_clicked_cb),
                           self);
 
         g_signal_connect (G_OBJECT (self), "notify::scale-factor",
-                          G_CALLBACK (redshiftgtk_window_scale_factor_changed),
+                          G_CALLBACK (window_scale_factor_changed_cb),
                           NULL);
 }
