@@ -45,7 +45,7 @@ msgstr "Dan"
 
 #: data/ui/redshiftgtk-window.ui:398
 msgid "Night"
-msgstr ""
+msgstr "Noć"
 
 #: data/ui/redshiftgtk-window.ui:510
 msgid "Location"
@@ -85,7 +85,7 @@ msgstr "Pokušaj ponovo"
 
 #: src/gui/redshiftgtk-window.c:239
 msgid "Cancel"
-msgstr "Odustani"
+msgstr "Otkaži"
 
 #: src/gui/redshiftgtk-window.c:278
 msgid "Could not enable autostart"
