@@ -30,7 +30,6 @@ test_redshift_wrapper_basic (void)
         redshiftgtk_redshift_wrapper_set_config_path (backend,
                                                       data_config_path,
                                                       &error);
-
         g_assert_no_error (error);
 
         config_path = redshiftgtk_redshift_wrapper_get_config_path (backend);
@@ -76,7 +75,6 @@ test_redshift_wrapper_get_latitude (void)
         load_test_conf (backend);
 
         gdouble latitude = redshiftgtk_backend_get_latitude (backend);
-
         g_assert_cmpfloat (latitude, ==, 45.38);
 }
 
@@ -87,7 +85,6 @@ test_redshift_wrapper_get_longtitude (void)
         load_test_conf (backend);
 
         gdouble longtitude = redshiftgtk_backend_get_longtitude (backend);
-
         g_assert_cmpfloat (longtitude, ==, 20.38);
 }
 
@@ -99,7 +96,6 @@ test_redshift_wrapper_get_brightness_day (void)
 
         gdouble brightness = redshiftgtk_backend_get_brightness (backend,
                                                                  TIME_PERIOD_DAY);
-
         g_assert_cmpfloat (brightness, ==, 0.8);
 }
 
@@ -111,7 +107,6 @@ test_redshift_wrapper_get_brightness_night (void)
 
         gdouble brightness = redshiftgtk_backend_get_brightness (backend,
                                                                  TIME_PERIOD_NIGHT);
-
         g_assert_cmpfloat (brightness, ==, 0.9);
 }
 
@@ -160,7 +155,6 @@ test_redshift_wrapper_get_adjustment_method (void)
         load_test_conf (backend);
 
         AdjustmentMethod method = redshiftgtk_backend_get_adjustment_method (backend);
-
         g_assert (method == ADJUSTMENT_METHOD_RANDR);
 }
 
@@ -171,7 +165,6 @@ test_redshift_wrapper_get_smooth_transition (void)
         load_test_conf (backend);
 
         gboolean transition = redshiftgtk_backend_get_smooth_transition (backend);
-
         g_assert (transition == TRUE);
 }
 
