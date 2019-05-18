@@ -22,7 +22,7 @@
 #include <glib/gi18n.h>
 
 #include "redshiftgtk-redshift-wrapper.h"
-#include "enums.h"
+#include "../enums.h"
 
 #define DEFAULT_SETTINGS_GROUP "redshift"
 #define MANUAL_SETTINGS_GROUP "manual"
@@ -60,20 +60,6 @@ G_DEFINE_TYPE_WITH_CODE (RedshiftGtkRedshiftWrapper,
                          G_IMPLEMENT_INTERFACE (REDSHIFTGTK_TYPE_BACKEND,
                                                 redshiftgtk_backend_iface_init))
 
-void
-create_file_if_not_exists (gchar   *path,
-                           GError **error)
-{
-        g_autoptr (GFile) file = NULL;
-
-        file = g_file_new_for_path (path);
-        g_file_create (file, G_FILE_CREATE_NONE, NULL, error);
-
-        /* Invalidate the error if the file already exists */
-        if (*error && g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_EXISTS))
-                *error = NULL;
-}
-
 static void
 redshiftgtk_redshift_wrapper_dispose (GObject *object)
 {
@@ -91,6 +77,39 @@ redshiftgtk_redshift_wrapper_class_init (RedshiftGtkRedshiftWrapperClass *klass)
         obj_class->dispose = redshiftgtk_redshift_wrapper_dispose;
 }
 
+void
+redshiftgtk_redshift_wrapper_load_config (RedshiftGtkRedshiftWrapper *self,
+                                          GError                    **error)
+{
+        g_assert (error == NULL || *error == NULL);
+        g_autoptr (GFile) file = NULL;
+
+        self->config = g_key_file_new ();
+
+        file = g_file_new_for_path (self->config_path);
+        g_file_create (file, G_FILE_CREATE_NONE, NULL, error);
+
+        /* Clear error if file exists */
+        if (*error) {
+                if (g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_EXISTS)) {
+                        g_clear_error (error);
+                } else {
+                        g_warning ("redshiftgtk_redshift_wrapper_load_config\n\
+        g_file_create: %s\n", (*error)->message);
+                        return;
+                }
+        }
+
+        g_key_file_load_from_file (self->config,
+                                   self->config_path,
+                                   G_KEY_FILE_NONE, error);
+
+        if (*error) {
+                g_warning ("redshiftgtk_redshift_wrapper_load_config\n\
+        g_key_file_load_from_file: %s\n", (*error)->message);
+        }
+}
+
 static void
 redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
 {
@@ -102,30 +121,12 @@ redshiftgtk_redshift_wrapper_init (RedshiftGtkRedshiftWrapper *self)
 
         user_config_path = g_get_user_config_dir ();
 
-        if (!user_config_path) {
-                g_warning ("redshiftgtk_redshift_wrapper_init\n\
-        g_get_user_config_dir: Could not get user config directory\n");
-                return;
-        }
+        g_assert (user_config_path != NULL);
 
         self->config_path = g_build_filename (user_config_path, "redshift.conf", NULL);
-        self->config = g_key_file_new ();
+        redshiftgtk_redshift_wrapper_load_config (self, &error);
 
-        create_file_if_not_exists (self->config_path, &error);
-        if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_init\n\
-        create_file_if_not_exists: %s\n", error->message);
-                return;
-        }
-
-        g_key_file_load_from_file (self->config,
-                                   self->config_path,
-                                   G_KEY_FILE_NONE, &error);
-
-        if (error) {
-                g_warning ("redshiftgtk_redshift_wrapper_init\n\
-        g_key_file_load_from_file: %s\n", error->message);
-        }
+        g_assert_null (error);
 }
 
 RedshiftGtkBackend*
@@ -441,11 +442,11 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
                                               DEFAULT_SETTINGS_GROUP,
                                               key, &error);
 
-        if (gamma_double < MIN_GAMMA || gamma_double > MAX_GAMMA)
-                return NULL;
-
         /* If it is indeed single double value, return now */
         if (!error) {
+                if (gamma_double < MIN_GAMMA || gamma_double > MAX_GAMMA)
+                        return NULL;
+
                 g_array_append_val (gamma, gamma_double);
                 g_array_append_val (gamma, gamma_double);
                 g_array_append_val (gamma, gamma_double);
@@ -455,7 +456,7 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
         /* Otherwise continue to R:G:B string format */
 
         /* Reset error pointer */
-        error = NULL;
+        g_clear_error (&error);
 
         /* Get the gamma in R:G:B string format */
         gamma_string = g_key_file_get_string (self->config,
@@ -795,11 +796,6 @@ redshiftgtk_redshift_wrapper_apply_changes (RedshiftGtkBackend *backend,
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
         g_assert (self->config != NULL);
 
-        create_file_if_not_exists (self->config_path, error);
-
-        if (*error)
-                return;
-
         g_key_file_save_to_file (self->config, self->config_path, error);
 }
 
@@ -829,3 +825,24 @@ redshiftgtk_backend_iface_init (RedshiftGtkBackendInterface *iface)
         iface->set_autostart = redshiftgtk_redshift_wrapper_set_autostart;
         iface->apply_changes = redshiftgtk_redshift_wrapper_apply_changes;
 }
+
+gchar*
+redshiftgtk_redshift_wrapper_get_config_path (RedshiftGtkBackend *backend)
+{
+        return REDSHIFTGTK_REDSHIFT_WRAPPER (backend)->config_path;
+}
+
+void
+redshiftgtk_redshift_wrapper_set_config_path (RedshiftGtkBackend *backend,
+                                              gchar              *path,
+                                              GError            **error)
+{
+        g_assert (path != NULL);
+        g_assert (error == NULL || *error == NULL);
+
+        RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
+
+        self->config_path = path;
+        redshiftgtk_redshift_wrapper_load_config (self, error);
+}
+

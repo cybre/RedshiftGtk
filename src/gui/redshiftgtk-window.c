@@ -16,12 +16,12 @@
  */
 
 #include <glib/gi18n.h>
-#include <redshiftgtk-backend.h>
-#include <redshiftgtk-redshift-wrapper.h>
 
 #include "redshiftgtk-config.h"
 #include "redshiftgtk-window.h"
 #include "redshiftgtk-radial-slider.h"
+#include "redshiftgtk-backend.h"
+#include "redshiftgtk-redshift-wrapper.h"
 
 typedef RedshiftGtkRadialSlider RadialSlider;
 

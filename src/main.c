@@ -17,7 +17,7 @@
 
 #include <glib/gi18n.h>
 
-#include <redshiftgtk-window.h>
+#include <gui/redshiftgtk-window.h>
 #include "redshiftgtk-config.h"
 
 static void

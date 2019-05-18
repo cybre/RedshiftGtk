@@ -19,7 +19,7 @@
 
 #include <glib-object.h>
 
-#include "enums.h"
+#include "../enums.h"
 
 G_BEGIN_DECLS
 
