@@ -20,8 +20,9 @@
 #include "redshiftgtk-config.h"
 #include "redshiftgtk-window.h"
 #include "redshiftgtk-radial-slider.h"
-#include "redshiftgtk-backend.h"
-#include "redshiftgtk-redshift-wrapper.h"
+
+#include "backend/redshiftgtk-backend.h"
+#include "backend/redshiftgtk-redshift-wrapper.h"
 
 typedef RedshiftGtkRadialSlider RadialSlider;
 

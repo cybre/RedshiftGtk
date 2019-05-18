@@ -3,7 +3,7 @@
 ###################
 
 libredshiftkgtk_gui_incs = [
-  include_directories('../backend')
+  include_directories('../')
 ]
 
 cc = meson.get_compiler('c')

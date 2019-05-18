@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 
 #include "redshiftgtk-redshift-wrapper.h"
-#include "../enums.h"
 
 #define DEFAULT_SETTINGS_GROUP "redshift"
 #define MANUAL_SETTINGS_GROUP "manual"
