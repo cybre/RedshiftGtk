@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
-	<id>com.github.cybre.RedshiftGtk.desktop</id>
-	<metadata_license>CC0-1.0</metadata_license>
-	<project_license></project_license>
-	<description>
-	</description>
+<component type="desktop-application">
+  <id>com.github.cybre.RedshiftGtk</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <name>Redshift Configuration</name>
+  <summary>A graphical configuration interface for redshift</summary>
+  <developer_name>Stefan Ric</developer_name>
+
+  <description>
+    <p>
+      Redshift Configuration is a program used to configure
+      redshift - the screen color temperature adjustment tool.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Different configurations for Day and Night</caption>
+      <image width="700" height="860">https://raw.githubusercontent.com/cybre/RedshiftGtk/master/data/screenshots/main.png</image>
+    </screenshot>
+  </screenshots>
+
+  <launchable type="desktop-id">com.github.cybre.RedshiftGtk.desktop</launchable>
+
+  <url type="homepage">https://github.com/cybre/RedshiftGtk</url>
+  <update_contact>stfric369@gmail.com</update_contact>
+  <translation type="gettext">redshiftgtk</translation>
 </component>
