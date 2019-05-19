@@ -43,7 +43,7 @@ static void
 test_redshift_wrapper_get_temperature (ObjectFixture *fixture,
                                        gconstpointer  user_data)
 {
-        TimePeriod period = (TimePeriod)user_data;
+        TimePeriod period = GPOINTER_TO_UINT (user_data);
         gdouble temperature = redshiftgtk_backend_get_temperature (fixture->backend,
                                                                    period);
         switch (period) {
@@ -85,7 +85,7 @@ test_redshift_wrapper_get_brightness (ObjectFixture *fixture,
                                       gconstpointer  user_data)
 {
 
-        TimePeriod period = (TimePeriod)user_data;
+        TimePeriod period = GPOINTER_TO_UINT (user_data);
         gdouble brightness = redshiftgtk_backend_get_brightness (fixture->backend,
                                                                  period);
         switch (period) {
@@ -102,7 +102,7 @@ static void
 test_redshift_wrapper_get_gamma (ObjectFixture *fixture,
                                  gconstpointer  user_data)
 {
-        TimePeriod period = (TimePeriod)user_data;
+        TimePeriod period = GPOINTER_TO_UINT (user_data);
         GArray *gamma = redshiftgtk_backend_get_gamma (fixture->backend,
                                                        period);
         g_assert (gamma != NULL);
@@ -171,7 +171,7 @@ main (gint   argc,
 
         g_test_add ("/Backend/RedshiftWrapper/get-location-provider",
                     ObjectFixture,
-                    GINT_TO_POINTER (TIME_PERIOD_NIGHT),
+                    NULL,
                     redshift_wrapper_fixture_set_up,
                     test_redshift_wrapper_get_location_provider,
                     redshift_wrapper_fixture_tear_down);
