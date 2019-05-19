@@ -833,15 +833,11 @@ redshiftgtk_redshift_wrapper_get_config_path (RedshiftGtkBackend *backend)
 
 void
 redshiftgtk_redshift_wrapper_set_config_path (RedshiftGtkBackend *backend,
-                                              gchar              *path,
-                                              GError            **error)
+                                              gchar              *path)
 {
         g_assert (path != NULL);
-        g_assert (error == NULL || *error == NULL);
 
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
-
         self->config_path = path;
-        redshiftgtk_redshift_wrapper_load_config (self, error);
 }
 

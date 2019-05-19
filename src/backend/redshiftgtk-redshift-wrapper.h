@@ -30,11 +30,13 @@ G_DECLARE_FINAL_TYPE (RedshiftGtkRedshiftWrapper, redshiftgtk_redshift_wrapper,
 RedshiftGtkBackend*
 redshiftgtk_redshift_wrapper_new ();
 
+void
+redshiftgtk_redshift_wrapper_load_config (RedshiftGtkRedshiftWrapper *self,
+                                          GError                    **error);
 gchar*
 redshiftgtk_redshift_wrapper_get_config_path (RedshiftGtkBackend *backend);
 void
 redshiftgtk_redshift_wrapper_set_config_path (RedshiftGtkBackend *backend,
-                                              gchar              *path,
-                                              GError            **error);
+                                              gchar              *path);
 
 G_END_DECLS

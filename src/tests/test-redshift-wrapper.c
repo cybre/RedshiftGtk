@@ -18,8 +18,9 @@ redshift_wrapper_fixture_set_up (ObjectFixture *fixture,
 
         fixture->data_config_path = g_build_filename (TEST_DATA_DIR, "redshift.conf", NULL);
         redshiftgtk_redshift_wrapper_set_config_path (fixture->backend,
-                                                      fixture->data_config_path,
-                                                      &error);
+                                                      fixture->data_config_path);
+        redshiftgtk_redshift_wrapper_load_config (REDSHIFTGTK_REDSHIFT_WRAPPER (fixture->backend),
+                                                  &error);
         g_assert_no_error (error);
 }
 
@@ -38,6 +39,18 @@ test_redshift_wrapper_get_config_path (ObjectFixture *fixture,
         gchar *config_path = redshiftgtk_redshift_wrapper_get_config_path (fixture->backend);
         g_assert_cmpstr (config_path, ==, fixture->data_config_path);
 }
+
+static void
+test_redshift_wrapper_set_config_path (ObjectFixture *fixture,
+                                       gconstpointer  user_data)
+{
+        gchar *path = g_strdup ("/path/to/config");
+        redshiftgtk_redshift_wrapper_set_config_path (fixture->backend,
+                                                      path);
+        gchar *config_path = redshiftgtk_redshift_wrapper_get_config_path (fixture->backend);
+        g_assert_cmpstr (config_path, ==, path);
+}
+
 
 static void
 test_redshift_wrapper_get_temperature (ObjectFixture *fixture,
@@ -258,6 +271,13 @@ main (gint   argc,
                     NULL,
                     redshift_wrapper_fixture_set_up,
                     test_redshift_wrapper_get_config_path,
+                    redshift_wrapper_fixture_tear_down);
+
+        g_test_add ("/Backend/RedshiftWrapper/set-config-path",
+                    ObjectFixture,
+                    NULL,
+                    redshift_wrapper_fixture_set_up,
+                    test_redshift_wrapper_set_config_path,
                     redshift_wrapper_fixture_tear_down);
 
         g_test_add ("/Backend/RedshiftWrapper/get-temperature-day",
