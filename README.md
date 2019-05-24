@@ -36,5 +36,5 @@ Don't forget to add your language to LINGUAS!
 # TODO
 - Make it possible to set dusk and dawn manually
 
-# Screenshots
+# Screenshot
 ![Landing view](data/screenshots/main.png)
