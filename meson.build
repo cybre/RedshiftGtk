@@ -1,4 +1,5 @@
-project('redshiftgtk', 'c',        version: '0.1.0',
+project('redshiftgtk', 'c',
+  version: '0.1',
   meson_version: '>= 0.40.0',
 )
 
