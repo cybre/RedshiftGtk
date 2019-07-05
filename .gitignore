@@ -59,4 +59,4 @@ build/
 *.pot
 *.mo
 
-vscode/
+.vscode/
