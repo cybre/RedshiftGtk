@@ -363,7 +363,7 @@ redshiftgtk_radial_slider_draw (GtkWidget *widget, cairo_t *cr)
                  -cos (self->priv->target * M_PI / 180.0)) + real_radius;
 
         cairo_save (cr);
-        if (!self->priv->knob_pixbuf) {
+        if (self->priv->knob_pixbuf) {
                 /* Scale the transformation matrix so that we could
                  * render the background image in full resolution on HiDpi
                  * displays
