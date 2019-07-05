@@ -51,7 +51,6 @@ test_redshift_wrapper_set_config_path (ObjectFixture *fixture,
         g_assert_cmpstr (config_path, ==, path);
 }
 
-
 static void
 test_redshift_wrapper_get_temperature (ObjectFixture *fixture,
                                        gconstpointer  user_data)

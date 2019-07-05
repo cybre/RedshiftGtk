@@ -44,7 +44,8 @@ struct _RedshiftGtkRadialSliderPrivate {
         gdouble target;
         gdouble max_diff;
         gdouble center_point;
-        GdkPixbuf *image_pixbuf;
+        GdkPixbuf *bg_pixbuf;
+        GdkPixbuf *knob_pixbuf;
         gdouble map_slope;
 };
 
@@ -57,8 +58,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (RedshiftGtkRadialSlider, redshiftgtk_radial_slider,
 
 
 void
-redshiftgtk_radial_slider_load_pixbuf (RedshiftGtkRadialSlider *self,
-                                       gchar *path)
+redshiftgtk_radial_slider_load_pixbuf (GdkPixbuf **dest_pixbuf,
+                                       gchar     *path)
 {
         g_autoptr(GError) error = NULL;
         GdkPixbuf *image = NULL;
@@ -69,7 +70,8 @@ redshiftgtk_radial_slider_load_pixbuf (RedshiftGtkRadialSlider *self,
                 printf ("redshiftgtk_radial_slider_load_pixbuf : %s\n",
                         error->message);
 
-        self->priv->image_pixbuf = image;
+        *dest_pixbuf = gdk_pixbuf_copy (image);
+        g_clear_object (&image);
 }
 
 void
@@ -192,7 +194,8 @@ redshiftgtk_radial_slider_dispose (GObject *obj)
 {
         RedshiftGtkRadialSlider *self = REDSHIFTGTK_RADIAL_SLIDER (obj);
 
-        g_clear_object (&self->priv->image_pixbuf);
+        g_clear_object (&self->priv->bg_pixbuf);
+        g_clear_object (&self->priv->knob_pixbuf);
 
         G_OBJECT_CLASS(redshiftgtk_radial_slider_parent_class)->dispose(obj);
 }
@@ -291,8 +294,7 @@ redshiftgtk_radial_slider_draw (GtkWidget *widget, cairo_t *cr)
 {
 
         RedshiftGtkRadialSlider *self = NULL;
-        gdouble knob_radius, track_width, radius, real_radius;
-        gint knob_x, knob_y;
+        gdouble knob_radius, track_width, radius, real_radius, knob_x, knob_y;
         GdkRGBA fg, track, knob = { 0 };
 
         self = REDSHIFTGTK_RADIAL_SLIDER (widget);
@@ -308,16 +310,17 @@ redshiftgtk_radial_slider_draw (GtkWidget *widget, cairo_t *cr)
         gdk_rgba_parse (&fg, "#0083AD");
         gdk_rgba_parse (&knob, "#E2E2E2");
 
+        gdouble scale_factor = gtk_widget_get_scale_factor (widget);
+
         /* Render the image if it exists, otherwise render the track */
         cairo_save (cr);
-        if (self->priv->image_pixbuf) {
-                gdouble scale_factor = gtk_widget_get_scale_factor (widget);
+        if (self->priv->bg_pixbuf) {
                 /* Scale the transformation matrix so that we could
                  * render the background image in full resolution on HiDpi
                  * displays
                  */
-                cairo_scale (cr, 1.0/scale_factor, 1.0/scale_factor);
-                gdk_cairo_set_source_pixbuf (cr, self->priv->image_pixbuf,
+                cairo_scale (cr, 1.0 / scale_factor, 1.0 / scale_factor);
+                gdk_cairo_set_source_pixbuf (cr, self->priv->bg_pixbuf,
                                              0, 0);
                 cairo_paint (cr);
         } else {
@@ -353,19 +356,30 @@ redshiftgtk_radial_slider_draw (GtkWidget *widget, cairo_t *cr)
         }
 
         /* Render the knob */
-        /* TODO: Make it possible to render an image like with the background */
-        real_radius = self->priv->widget_size/2.0;
+        real_radius = self->priv->widget_size / 2.0;
         knob_x = round ((self->priv->radius - (track_width / 2.0)) *
                  sin (self->priv->target * M_PI / 180.0)) + real_radius;
         knob_y = round ((self->priv->radius - (track_width / 2.0)) *
                  -cos (self->priv->target * M_PI / 180.0)) + real_radius;
 
         cairo_save (cr);
-        cairo_set_source_rgba (cr, knob.red, knob.green, knob.blue, knob.alpha);
-        cairo_set_line_width (cr, 1);
-        cairo_arc (cr, knob_x, knob_y, knob_radius, 0, 2.0 * M_PI);
-        cairo_stroke_preserve (cr);
-        cairo_fill (cr);
+        if (!self->priv->knob_pixbuf) {
+                /* Scale the transformation matrix so that we could
+                 * render the background image in full resolution on HiDpi
+                 * displays
+                 */
+                cairo_scale (cr, 1.0 / scale_factor, 1.0 / scale_factor);
+                gdk_cairo_set_source_pixbuf (cr, self->priv->knob_pixbuf,
+                                             knob_x * scale_factor - knob_radius,
+                                             knob_y * scale_factor - knob_radius);
+                cairo_paint (cr);
+        } else {
+                cairo_set_source_rgba (cr, knob.red, knob.green, knob.blue, knob.alpha);
+                cairo_set_line_width (cr, 1);
+                cairo_arc (cr, knob_x, knob_y, knob_radius, 0, 2.0 * M_PI);
+                cairo_stroke_preserve (cr);
+                cairo_fill (cr);
+        }
         cairo_restore (cr);
 
         if (self->priv->render_value) {
@@ -565,13 +579,25 @@ redshiftgtk_radial_slider_set_render_value (RedshiftGtkRadialSlider *self,
 }
 
 void
-redshiftgtk_radial_slider_set_image_path (RedshiftGtkRadialSlider *self,
-                                          gchar* image_path)
+redshiftgtk_radial_slider_set_bg_path (RedshiftGtkRadialSlider *self,
+                                       gchar* image_path)
 {
         g_assert (self != NULL && REDSHIFTGTK_IS_RADIAL_SLIDER (self));
         g_assert (image_path != NULL);
 
-        redshiftgtk_radial_slider_load_pixbuf (self, image_path);
+        redshiftgtk_radial_slider_load_pixbuf (&(self->priv->bg_pixbuf), image_path);
+        redshiftgtk_radial_slider_update (self);
+}
+
+void
+redshiftgtk_radial_slider_set_knob_path (RedshiftGtkRadialSlider *self,
+                                         gchar* image_path)
+{
+        g_assert (self != NULL && REDSHIFTGTK_IS_RADIAL_SLIDER (self));
+        g_assert (image_path != NULL);
+
+        redshiftgtk_radial_slider_load_pixbuf (&(self->priv->knob_pixbuf), image_path);
+        self->priv->knob_radius = gdk_pixbuf_get_width (self->priv->knob_pixbuf) / 2;
         redshiftgtk_radial_slider_update (self);
 }
 
@@ -601,7 +627,8 @@ redshiftgtk_radial_slider_init (RedshiftGtkRadialSlider *self)
         self->priv = redshiftgtk_radial_slider_get_instance_private (self);
         self->priv->target = 0;
         self->priv->max_diff = 200;
-        self->priv->image_pixbuf = NULL;
+        self->priv->bg_pixbuf = NULL;
+        self->priv->knob_pixbuf = NULL;
         self->priv->map_slope = 0;
 
         gtk_widget_set_events (GTK_WIDGET (self), GDK_BUTTON_PRESS_MASK

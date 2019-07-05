@@ -61,7 +61,10 @@ void
 redshiftgtk_radial_slider_set_render_value (RedshiftGtkRadialSlider *self,
                                             gboolean                 render_text);
 void
-redshiftgtk_radial_slider_set_image_path   (RedshiftGtkRadialSlider *self,
+redshiftgtk_radial_slider_set_bg_path      (RedshiftGtkRadialSlider *self,
+                                            gchar                   *image_path);
+void
+redshiftgtk_radial_slider_set_knob_path    (RedshiftGtkRadialSlider *self,
                                             gchar                   *image_path);
 gdouble
 redshiftgtk_radial_slider_get_value        (RedshiftGtkRadialSlider *self);

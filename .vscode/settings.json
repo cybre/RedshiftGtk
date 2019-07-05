@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "redshiftgtk-backend.h": "c",
+        "glib-object.h": "c",
+        "redshiftgtk-window.h": "c",
+        "gtk.h": "c"
+    }
+}

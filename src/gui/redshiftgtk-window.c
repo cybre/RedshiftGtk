@@ -414,15 +414,23 @@ window_scale_factor_changed_cb (RedshiftGtkWindow *self,
         gdouble factor = gtk_widget_get_scale_factor (GTK_WIDGET(self));
 
         if (factor == 1.0) {
-                redshiftgtk_radial_slider_set_image_path (self->day_temp_slider,
+                redshiftgtk_radial_slider_set_bg_path (self->day_temp_slider,
                         "/com/github/cybre/RedshiftGtk/images/slider-day.png");
-                redshiftgtk_radial_slider_set_image_path (self->night_temp_slider,
+                redshiftgtk_radial_slider_set_bg_path (self->night_temp_slider,
                         "/com/github/cybre/RedshiftGtk/images/slider-night.png");
+                redshiftgtk_radial_slider_set_knob_path (self->day_temp_slider,
+                        "/com/github/cybre/RedshiftGtk/images/knob.png");
+                redshiftgtk_radial_slider_set_knob_path (self->night_temp_slider,
+                        "/com/github/cybre/RedshiftGtk/images/knob.png");
         } else if (factor == 2.0) {
-                redshiftgtk_radial_slider_set_image_path (self->day_temp_slider,
+                redshiftgtk_radial_slider_set_bg_path (self->day_temp_slider,
                         "/com/github/cybre/RedshiftGtk/images@2x/slider-day.png");
-                redshiftgtk_radial_slider_set_image_path (self->night_temp_slider,
+                redshiftgtk_radial_slider_set_bg_path (self->night_temp_slider,
                         "/com/github/cybre/RedshiftGtk/images@2x/slider-night.png");
+                redshiftgtk_radial_slider_set_knob_path (self->day_temp_slider,
+                        "/com/github/cybre/RedshiftGtk/images@2x/knob.png");
+                redshiftgtk_radial_slider_set_knob_path (self->night_temp_slider,
+                        "/com/github/cybre/RedshiftGtk/images@2x/knob.png");
         }
 
 }
@@ -465,10 +473,11 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         day_adjustment = gtk_adjustment_new (value, 1000.00, 12000.00,
                                              50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (day_adjustment, 256.0);
-        redshiftgtk_radial_slider_set_image_path (radial,
+        redshiftgtk_radial_slider_set_bg_path (radial,
                 g_strconcat (image_resource_path, "slider-day.png", NULL));
+        redshiftgtk_radial_slider_set_knob_path (radial,
+                g_strconcat (image_resource_path, "knob.png", NULL));
         redshiftgtk_radial_slider_set_track_width (radial, 10.0);
-        redshiftgtk_radial_slider_set_knob_radius (radial, 15.0);
         redshiftgtk_radial_slider_set_render_fill (radial, FALSE);
         redshiftgtk_radial_slider_set_render_value (radial, FALSE);
         gtk_container_add (GTK_CONTAINER (self->day_overlay),
@@ -490,10 +499,11 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         night_adjustment = gtk_adjustment_new (value, 1000.00, 12000.00,
                                                50.00, 100.0, 0);
         radial = redshiftgtk_radial_slider_new (night_adjustment, 256.0);
-        redshiftgtk_radial_slider_set_image_path (radial,
+        redshiftgtk_radial_slider_set_bg_path (radial,
                 g_strconcat (image_resource_path, "slider-night.png", NULL));
+        redshiftgtk_radial_slider_set_knob_path (radial,
+                g_strconcat (image_resource_path, "knob.png", NULL));
         redshiftgtk_radial_slider_set_track_width (radial, 10.0);
-        redshiftgtk_radial_slider_set_knob_radius (radial, 15.0);
         redshiftgtk_radial_slider_set_render_fill (radial, FALSE);
         redshiftgtk_radial_slider_set_render_value (radial, FALSE);
         gtk_container_add (GTK_CONTAINER (self->night_overlay),

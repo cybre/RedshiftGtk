@@ -4,8 +4,10 @@
     <file>ui/redshiftgtk-window.ui</file>
     <file>images/slider-day.png</file>
     <file>images/slider-night.png</file>
+    <file>images/knob.png</file>
     <file>images@2x/slider-day.png</file>
     <file>images@2x/slider-night.png</file>
+    <file>images@2x/knob.png</file>
     <file>style/custom.css</file>
   </gresource>
 </gresources>

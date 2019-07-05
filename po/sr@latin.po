@@ -7,18 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: redshiftgtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-17 01:53+0200\n"
+"POT-Creation-Date: 2019-07-05 20:48+0200\n"
 "PO-Revision-Date: 2019-05-17 01:55+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: sr@latin\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"Language: sr@latin\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: data/com.github.cybre.RedshiftGtk.desktop.in:3
+#: data/com.github.cybre.RedshiftGtk.appdata.xml.in:6
 #: data/ui/redshiftgtk-window.ui:72
 msgid "Redshift Configuration"
 msgstr "Redshift Konfiguracija"
@@ -27,11 +29,26 @@ msgstr "Redshift Konfiguracija"
 msgid "Configuration tool for redshift"
 msgstr "Konfiguracijska alatka za redshift"
 
-#: data/ui/redshiftgtk-window.ui:138 data/ui/redshiftgtk-window.ui:286
+#: data/com.github.cybre.RedshiftGtk.appdata.xml.in:7
+#, fuzzy
+msgid "A graphical configuration interface for redshift"
+msgstr "Konfiguracijska alatka za redshift"
+
+#: data/com.github.cybre.RedshiftGtk.appdata.xml.in:11
+msgid ""
+"Redshift Configuration is a program used to configure redshift - the screen "
+"color temperature adjustment tool."
+msgstr ""
+
+#: data/com.github.cybre.RedshiftGtk.appdata.xml.in:19
+msgid "Different configurations for Day and Night"
+msgstr ""
+
+#: data/ui/redshiftgtk-window.ui:138 data/ui/redshiftgtk-window.ui:289
 msgid "Brightness"
 msgstr "Osvetljenje"
 
-#: data/ui/redshiftgtk-window.ui:168 data/ui/redshiftgtk-window.ui:316
+#: data/ui/redshiftgtk-window.ui:168 data/ui/redshiftgtk-window.ui:319
 msgid ""
 "Gamma\n"
 "(RGB)"
@@ -39,67 +56,67 @@ msgstr ""
 "Gama\n"
 "(RGB)"
 
-#: data/ui/redshiftgtk-window.ui:250
+#: data/ui/redshiftgtk-window.ui:253
 msgid "Day"
 msgstr "Dan"
 
-#: data/ui/redshiftgtk-window.ui:398
+#: data/ui/redshiftgtk-window.ui:404
 msgid "Night"
 msgstr "Noć"
 
-#: data/ui/redshiftgtk-window.ui:510
+#: data/ui/redshiftgtk-window.ui:533
 msgid "Location"
 msgstr "Lokacija"
 
-#: data/ui/redshiftgtk-window.ui:543
+#: data/ui/redshiftgtk-window.ui:569
 msgid "Automatic"
 msgstr "Automatsko"
 
-#: data/ui/redshiftgtk-window.ui:561
+#: data/ui/redshiftgtk-window.ui:587
 msgid "Latitude:"
 msgstr "Latituda:"
 
-#: data/ui/redshiftgtk-window.ui:574
+#: data/ui/redshiftgtk-window.ui:600
 msgid "Longtitude:"
 msgstr "Longtituda:"
 
-#: data/ui/redshiftgtk-window.ui:612
+#: data/ui/redshiftgtk-window.ui:638
 msgid "Manual"
 msgstr "Ručno"
 
-#: data/ui/redshiftgtk-window.ui:628
+#: data/ui/redshiftgtk-window.ui:654
 msgid "Method"
 msgstr "Metod"
 
-#: data/ui/redshiftgtk-window.ui:662
+#: data/ui/redshiftgtk-window.ui:688
 msgid "Smooth transition"
 msgstr "Tranzicija"
 
-#: data/ui/redshiftgtk-window.ui:690
+#: data/ui/redshiftgtk-window.ui:716
 msgid "Autostart"
 msgstr "Autostart"
 
-#: src/gui/redshiftgtk-window.c:237
+#: src/gui/redshiftgtk-window.c:240
 msgid "Try Again"
 msgstr "Pokušaj ponovo"
 
-#: src/gui/redshiftgtk-window.c:239
+#: src/gui/redshiftgtk-window.c:242
 msgid "Cancel"
 msgstr "Otkaži"
 
-#: src/gui/redshiftgtk-window.c:278
+#: src/gui/redshiftgtk-window.c:281
 msgid "Could not enable autostart"
 msgstr "Nije moguće omogućiti automatsko pokretanje"
 
-#: src/gui/redshiftgtk-window.c:295
+#: src/gui/redshiftgtk-window.c:298
 msgid "Could not apply changes"
 msgstr "Nije moguće primeniti izmene"
 
-#: src/gui/redshiftgtk-window.c:311
+#: src/gui/redshiftgtk-window.c:314
 msgid "Could not start redshift"
 msgstr "Nije moguće pokrenuti redshift"
 
-#: src/backend/redshiftgtk-redshift-wrapper.c:760
+#: src/backend/redshiftgtk-redshift-wrapper.c:778
 #, c-format
 msgid "Could not create parent directories: %s"
 msgstr "Nije moguće kreirati potrebne direktorije: %s"
