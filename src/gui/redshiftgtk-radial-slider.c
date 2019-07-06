@@ -385,8 +385,8 @@ redshiftgtk_radial_slider_draw (GtkWidget *widget, cairo_t *cr)
         if (self->priv->render_value) {
                 /* Draw the value */
                 cairo_text_extents_t extents;
-                g_autofree gchar *text = g_strdup_printf("%d",
-                        (gint)gtk_adjustment_get_value (self->priv->adjustment));
+                g_autofree gchar *text = g_strdup_printf("%.0f",
+                        gtk_adjustment_get_value (self->priv->adjustment));
                 cairo_save (cr);
                 cairo_set_font_size (cr, 35);
                 cairo_set_source_rgb (cr, 255, 255, 255);
