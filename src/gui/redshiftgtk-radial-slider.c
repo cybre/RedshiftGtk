@@ -56,8 +56,7 @@ static GParamSpec *obj_properties[N_PROPS] = {
 G_DEFINE_TYPE_WITH_PRIVATE (RedshiftGtkRadialSlider, redshiftgtk_radial_slider,
                             GTK_TYPE_DRAWING_AREA)
 
-
-void
+static void
 redshiftgtk_radial_slider_load_pixbuf (GdkPixbuf **dest_pixbuf,
                                        gchar     *path)
 {
@@ -88,7 +87,6 @@ redshiftgtk_radial_slider_update (RedshiftGtkRadialSlider *self)
 
         gtk_widget_queue_draw (GTK_WIDGET (self));
 }
-
 
 /**
  * Set GObject properties
