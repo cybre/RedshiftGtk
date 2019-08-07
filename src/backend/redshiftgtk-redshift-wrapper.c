@@ -147,9 +147,9 @@ redshiftgtk_redshift_wrapper_stop (RedshiftGtkBackend *backend)
         g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, NULL,
                           "redshift", "-x", "-m", "vidmode", NULL);
         g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, NULL,
-                          "killall", "-s", "KILL", "redshift", NULL);
+                          "killall", "-e", "-s", "KILL", "redshift", NULL);
         g_subprocess_new (G_SUBPROCESS_FLAGS_NONE, NULL,
-                          "killall", "-s", "KILL", "redshift-gtk", NULL);
+                          "killall", "-e", "-s", "KILL", "redshift-gtk", NULL);
         if (self->process)
                 g_subprocess_force_exit (self->process);
 
