@@ -127,7 +127,7 @@ redshiftgtk_window_class_init (RedshiftGtkWindowClass *klass)
                                               cancel_button);
 }
 
-void
+static void
 redshiftgtk_window_populate_controls (RedshiftGtkWindow *self)
 {
         /* Location provider */
@@ -193,7 +193,7 @@ redshiftgtk_window_populate_controls (RedshiftGtkWindow *self)
                                redshiftgtk_backend_get_autostart (self->backend));
 }
 
-void
+static void
 adjustment_value_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
         GtkSpinButton *entry = data;
@@ -201,14 +201,14 @@ adjustment_value_changed_cb (GtkAdjustment *adjustment, gpointer data)
         gtk_spin_button_set_value (entry, value);
 }
 
-void
+static void
 spinner_value_changed_cb (GtkSpinButton *spinner, gpointer data)
 {
         RadialSlider *slider = data;
         redshiftgtk_radial_slider_update(slider);
 }
 
-void
+static void
 try_again_dialog_response_cb (GtkDialog *dialog,
                               gint       response_id,
                               gpointer   user_data)
@@ -224,7 +224,7 @@ try_again_dialog_response_cb (GtkDialog *dialog,
         callback (self);
 }
 
-void
+static void
 redshiftgtk_window_show_try_again_dialog (RedshiftGtkWindow *self,
                                           const gchar *message,
                                           const gchar *error_message,
@@ -266,7 +266,7 @@ redshiftgtk_window_show_try_again_dialog (RedshiftGtkWindow *self,
                           callback);
 }
 
-void
+static void
 backend_set_autostart_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
@@ -285,7 +285,7 @@ backend_set_autostart_cb (RedshiftGtkWindow *self)
         }
 }
 
-void
+static void
 backend_apply_changes_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
@@ -301,7 +301,7 @@ backend_apply_changes_cb (RedshiftGtkWindow *self)
         }
 }
 
-void
+static void
 backend_start_cb (RedshiftGtkWindow *self)
 {
         g_autoptr (GError) error = NULL;
@@ -317,7 +317,7 @@ backend_start_cb (RedshiftGtkWindow *self)
         }
 }
 
-void
+static void
 apply_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
@@ -392,7 +392,7 @@ apply_button_clicked_cb (GtkWidget *widget, gpointer data)
         backend_start_cb (self);
 }
 
-void
+static void
 cancel_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
@@ -400,38 +400,31 @@ cancel_button_clicked_cb (GtkWidget *widget, gpointer data)
         gtk_window_close (GTK_WINDOW (self));
 }
 
-void
+static void
 stop_button_clicked_cb (GtkWidget *widget, gpointer data)
 {
         RedshiftGtkWindow *self = data;
         redshiftgtk_backend_stop (self->backend);
 }
 
-void
+static void
 window_scale_factor_changed_cb (RedshiftGtkWindow *self,
                                 gpointer data)
 {
-        gdouble factor = gtk_widget_get_scale_factor (GTK_WIDGET(self));
+        gchar *image_resource_path = "/com/github/cybre/RedshiftGtk/images/";
 
-        if (factor == 1.0) {
-                redshiftgtk_radial_slider_set_bg_path (self->day_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images/slider-day.png");
-                redshiftgtk_radial_slider_set_bg_path (self->night_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images/slider-night.png");
-                redshiftgtk_radial_slider_set_knob_path (self->day_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images/knob.png");
-                redshiftgtk_radial_slider_set_knob_path (self->night_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images/knob.png");
-        } else if (factor == 2.0) {
-                redshiftgtk_radial_slider_set_bg_path (self->day_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images@2x/slider-day.png");
-                redshiftgtk_radial_slider_set_bg_path (self->night_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images@2x/slider-night.png");
-                redshiftgtk_radial_slider_set_knob_path (self->day_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images@2x/knob.png");
-                redshiftgtk_radial_slider_set_knob_path (self->night_temp_slider,
-                        "/com/github/cybre/RedshiftGtk/images@2x/knob.png");
-        }
+        gdouble factor = gtk_widget_get_scale_factor (GTK_WIDGET (self));
+        if (factor == 2.0)
+                image_resource_path = "/com/github/cybre/RedshiftGtk/images@2x/";
+
+        redshiftgtk_radial_slider_set_bg_path (self->day_temp_slider,
+                g_strconcat (image_resource_path, "slider-day.png", NULL));
+        redshiftgtk_radial_slider_set_bg_path (self->night_temp_slider,
+                g_strconcat (image_resource_path, "slider-night.png", NULL));
+        redshiftgtk_radial_slider_set_knob_path (self->day_temp_slider,
+                g_strconcat (image_resource_path, "knob.png", NULL));
+        redshiftgtk_radial_slider_set_knob_path (self->night_temp_slider,
+                g_strconcat (image_resource_path, "knob.png", NULL));
 
 }
 
@@ -446,7 +439,7 @@ redshiftgtk_window_init (RedshiftGtkWindow *self)
         GdkScreen *screen;
         g_autoptr(GtkCssProvider) provider = NULL;
         gdouble value;
-        const gchar *image_resource_path;
+        gchar *image_resource_path;
 
         gtk_widget_init_template (GTK_WIDGET (self));
         self->backend = redshiftgtk_redshift_wrapper_new();

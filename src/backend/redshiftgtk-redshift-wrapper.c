@@ -215,7 +215,7 @@ default_temp:
         return DEFAULT_NIGHT_TEMPERATURE;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_temperature (RedshiftGtkBackend *backend,
                                               TimePeriod          period,
                                               gdouble             temperature)
@@ -239,7 +239,7 @@ redshiftgtk_redshift_wrapper_set_temperature (RedshiftGtkBackend *backend,
                                key, temperature);
 }
 
-LocationProvider
+static LocationProvider
 redshiftgtk_redshift_wrapper_get_location_provider (RedshiftGtkBackend *backend)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
@@ -265,7 +265,7 @@ redshiftgtk_redshift_wrapper_get_location_provider (RedshiftGtkBackend *backend)
         return LOCATION_PROVIDER_AUTO;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_location_provider (RedshiftGtkBackend *backend,
                                                     LocationProvider    provider)
 {
@@ -285,7 +285,7 @@ redshiftgtk_redshift_wrapper_set_location_provider (RedshiftGtkBackend *backend,
                                "location-provider", provider_string);
 }
 
-gdouble
+static gdouble
 redshiftgtk_redshift_wrapper_get_latitude (RedshiftGtkBackend *backend)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
@@ -306,7 +306,7 @@ redshiftgtk_redshift_wrapper_get_latitude (RedshiftGtkBackend *backend)
         return latitude;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_latitude (RedshiftGtkBackend *backend,
                                            gdouble             latitude)
 {
@@ -317,7 +317,7 @@ redshiftgtk_redshift_wrapper_set_latitude (RedshiftGtkBackend *backend,
                                "lat", g_strdup_printf ("%.2f", latitude));
 }
 
-gdouble
+static gdouble
 redshiftgtk_redshift_wrapper_get_longtitude (RedshiftGtkBackend *backend)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
@@ -338,7 +338,7 @@ redshiftgtk_redshift_wrapper_get_longtitude (RedshiftGtkBackend *backend)
         return longtitude;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_longtitude (RedshiftGtkBackend *backend,
                                              gdouble             longtitude)
 {
@@ -349,7 +349,7 @@ redshiftgtk_redshift_wrapper_set_longtitude (RedshiftGtkBackend *backend,
                                "lon", g_strdup_printf ("%.2f", longtitude));
 }
 
-gdouble
+static gdouble
 redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
                                              TimePeriod          period)
 {
@@ -386,7 +386,7 @@ redshiftgtk_redshift_wrapper_get_brightness (RedshiftGtkBackend *backend,
         return brightness;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_brightness (RedshiftGtkBackend *backend,
                                              TimePeriod          period,
                                              gdouble             brightness)
@@ -410,7 +410,7 @@ redshiftgtk_redshift_wrapper_set_brightness (RedshiftGtkBackend *backend,
                                key, g_strdup_printf ("%.1f", brightness));
 }
 
-GArray*
+static GArray*
 redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
                                         TimePeriod          period)
 {
@@ -499,7 +499,7 @@ redshiftgtk_redshift_wrapper_get_gamma (RedshiftGtkBackend *backend,
         return gamma;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_gamma (RedshiftGtkBackend *backend,
                                         TimePeriod          period,
                                         gdouble             red,
@@ -528,7 +528,7 @@ redshiftgtk_redshift_wrapper_set_gamma (RedshiftGtkBackend *backend,
                                key, gamma);
 }
 
-AdjustmentMethod
+static AdjustmentMethod
 redshiftgtk_redshift_wrapper_get_adjustment_method (RedshiftGtkBackend *backend)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
@@ -555,8 +555,9 @@ redshiftgtk_redshift_wrapper_get_adjustment_method (RedshiftGtkBackend *backend)
         return ADJUSTMENT_METHOD_AUTO;
 }
 
-void redshiftgtk_redshift_wrapper_set_adjustment_method (RedshiftGtkBackend *backend,
-                                                         AdjustmentMethod    method)
+static void
+redshiftgtk_redshift_wrapper_set_adjustment_method (RedshiftGtkBackend *backend,
+                                                    AdjustmentMethod    method)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
         g_assert (self->config != NULL);
@@ -579,7 +580,7 @@ void redshiftgtk_redshift_wrapper_set_adjustment_method (RedshiftGtkBackend *bac
                                "adjustment-method", method_string);
 }
 
-gboolean
+static gboolean
 redshiftgtk_redshift_wrapper_get_smooth_transition (RedshiftGtkBackend *backend)
 {
         RedshiftGtkRedshiftWrapper *self = REDSHIFTGTK_REDSHIFT_WRAPPER (backend);
@@ -600,7 +601,7 @@ redshiftgtk_redshift_wrapper_get_smooth_transition (RedshiftGtkBackend *backend)
         return transition;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_smooth_transition (RedshiftGtkBackend *backend,
                                                     gboolean            transition)
 {
@@ -611,7 +612,7 @@ redshiftgtk_redshift_wrapper_set_smooth_transition (RedshiftGtkBackend *backend,
                                 "fade", transition);
 }
 
-gboolean
+static gboolean
 redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
 {
         g_autoptr (GFile) file = NULL;
@@ -674,7 +675,7 @@ redshiftgtk_redshift_wrapper_get_autostart (RedshiftGtkBackend *self)
         return FALSE;
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_autostart_file_create_cb (GObject *source_object,
                                                        GAsyncResult *result,
                                                        gpointer user_data)
@@ -715,7 +716,7 @@ X-GNOME-Autostart-enabled=%s", hidden_value, autostart_value), NULL, &error);
         }
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                                             gboolean            autostart,
                                             GError            **error)
@@ -788,7 +789,7 @@ redshiftgtk_redshift_wrapper_set_autostart (RedshiftGtkBackend *self,
                              GINT_TO_POINTER (autostart));
 }
 
-void
+static void
 redshiftgtk_redshift_wrapper_apply_changes (RedshiftGtkBackend *backend,
                                             GError            **error)
 {
