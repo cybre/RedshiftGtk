@@ -65,9 +65,11 @@ redshiftgtk_radial_slider_load_pixbuf (GdkPixbuf **dest_pixbuf,
 
         image = gdk_pixbuf_new_from_resource (path, &error);
 
-        if (error)
+        if (error) {
                 printf ("redshiftgtk_radial_slider_load_pixbuf : %s\n",
                         error->message);
+                return;
+        }
 
         *dest_pixbuf = gdk_pixbuf_copy (image);
         g_clear_object (&image);
